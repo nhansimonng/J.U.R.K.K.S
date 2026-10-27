@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.database import get_db
+from app.auth import router as auth_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,6 +17,7 @@ logging.basicConfig(
 )
 
 app = FastAPI(title="Pump Check API")
+app.include_router(auth_router)
 
 # Lets the frontend (VS Code Live Server) call this API from the browser
 app.add_middleware(
