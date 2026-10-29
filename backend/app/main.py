@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.database import get_db
 from app.auth import router as auth_router
+from app.gyms import router as gyms_router
 from app.workout_logs import router as workout_logs_router
 
 logging.basicConfig(
@@ -19,6 +20,7 @@ logging.basicConfig(
 
 app = FastAPI(title="Pump Check API")
 app.include_router(auth_router)
+app.include_router(gyms_router)
 app.include_router(workout_logs_router)
 
 # Lets the frontend (VS Code Live Server) call this API from the browser
