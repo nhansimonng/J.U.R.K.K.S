@@ -15,8 +15,8 @@ python -m pip install -r requirements-dev.txt
 cp .env.example .env
 ```
 
-Fill in `.env` with your team's Supabase URL, anon key, and database connection
-URL. Do not commit it or paste secrets into chat. An existing `backend/.env`
+Fill in `.env` with your team's Supabase URL, publishable (or anon) key, and database connection
+URL. The code reads the publishable key under SUPABASE_ANON_KEY for compatibility. Do not commit it or paste secrets into chat. An existing `backend/.env`
 takes precedence over the root `.env`; environment variables take precedence
 over both. No service-role key is needed for authentication.
 

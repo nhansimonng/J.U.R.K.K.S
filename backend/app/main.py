@@ -12,21 +12,34 @@ from app.database import get_db
 from app.auth import router as auth_router
 from app.gyms import router as gyms_router
 from app.workout_logs import router as workout_logs_router
+from app.workout_plans import router as workout_plans_router
+from app.community import router as community_router
+from app.reviews import router as reviews_router
+from app.foods import router as foods_router
+from app.config import CORS_ORIGINS
+from app.upload_limit import PhotoBodyLimit
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
+# USDA URLs include a key; do not emit HTTP client URLs in ordinary logs.
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 app = FastAPI(title="Pump Check API")
+app.add_middleware(PhotoBodyLimit)
 app.include_router(auth_router)
 app.include_router(gyms_router)
 app.include_router(workout_logs_router)
+app.include_router(workout_plans_router)
+app.include_router(community_router)
+app.include_router(reviews_router)
+app.include_router(foods_router)
 
 # Lets the frontend (VS Code Live Server) call this API from the browser
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )

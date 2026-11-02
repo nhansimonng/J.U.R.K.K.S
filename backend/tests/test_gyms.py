@@ -14,6 +14,7 @@ from app.main import app
 from app.models.gym import Gym
 from app.models.review import GymReview
 from app.models.user import User
+from app.models.equipment import Equipment
 
 ALICE = "aaaaaaaa-1111-4111-8111-111111111111"
 GYM_A = "cccccccc-1111-4111-8111-111111111111"
@@ -33,6 +34,7 @@ def client():
     User.__table__.create(engine)
     Gym.__table__.create(engine)
     GymReview.__table__.create(engine)
+    Equipment.__table__.create(engine)
     with Session(engine) as db:
         db.add(User(id=UUID(ALICE), username="alice"))
         db.add_all([
