@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gym · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header id="navbar"></header>
+
+  <main id="main" class="container stack">
+    <p><a href="gyms.html">← Back to search</a></p>
+
+    <div id="message" class="alert" hidden></div>
+
+    <section class="card" aria-labelledby="gym-name">
+      <h1 id="gym-name">Loading…</h1>
+      <p id="gym-address" class="muted"></p>
+      <p id="gym-rating"></p>
+    </section>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="equipment-heading">
+        <h2 id="equipment-heading">Equipment</h2>
+        <ul id="equipment-list" class="list"></ul>
+      </section>
+      <section class="card" aria-labelledby="busy-heading">
+        <h2 id="busy-heading">Busy hours</h2>
+        <ul id="busy-list" class="list"></ul>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="write-heading">
+      <form id="review-form" novalidate>
+        <h2 id="write-heading">Write a review</h2>
+
+        <fieldset class="rating-options">
+          <legend>Rating</legend>
+          <label><input type="radio" name="rating" value="1"> 1 ★</label>
+          <label><input type="radio" name="rating" value="2"> 2 ★</label>
+          <label><input type="radio" name="rating" value="3"> 3 ★</label>
+          <label><input type="radio" name="rating" value="4"> 4 ★</label>
+          <label><input type="radio" name="rating" value="5"> 5 ★</label>
+        </fieldset>
+
+        <div class="field">
+          <label for="review-text">Your review (optional)</label>
+          <textarea id="review-text" maxlength="1000"></textarea>
+          <p id="char-count" class="hint" aria-live="polite">0 / 1000</p>
+        </div>
+
+        <div class="field">
+          <label for="busy-hours">When is it busy? (optional)</label>
+          <input id="busy-hours" type="text" maxlength="100" placeholder="e.g. 5pm-8pm on weekdays">
+        </div>
+          <div class="field">
+          <label for="photo">Photo (optional)</label>
+          <input id="photo" type="file" accept="image/jpeg,image/png">
+          <p id="photo-status" class="hint" aria-live="polite">JPG or PNG. It is shrunk to under 500 KB before upload.</p>
+          <img id="photo-preview" class="review-photo" alt="Preview of the photo you chose" hidden>
+          <button id="photo-remove" class="btn btn-secondary btn-small" type="button" hidden style="margin-top: 0.5rem;">Remove photo</button>
+        </div>
+        <button class="btn" type="submit">Post review</button>
+      </form>
+    </section>
+
+    <section aria-labelledby="reviews-heading" class="stack">
+      <h2 id="reviews-heading">Reviews</h2>
+      <p id="review-count" class="muted" aria-live="polite"></p>
+      <div id="reviews" class="stack"></div>
+      <button id="load-more" class="btn btn-secondary" type="button" hidden>Load more reviews</button>
+    </section>
+  </main>
+
+  <dialog id="report-dialog" aria-labelledby="report-title">
+    <form id="report-form" novalidate>
+      <h2 id="report-title">Report this review</h2>
+      <p class="muted small">Tell us why it is fake, spam, or inappropriate.</p>
+      <div class="field">
+        <label for="report-reason">Reason</label>
+        <textarea id="report-reason" maxlength="1000"></textarea>
+      </div>
+      <p id="report-error" class="alert alert-error" role="alert" hidden></p>
+      <div class="row">
+        <button id="report-cancel" class="btn btn-secondary" type="button">Cancel</button>
+        <button class="btn btn-danger" type="submit">Send report</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/gym-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <main id="main" class="container" style="max-width: 420px;">
+    <h1 class="visually-hidden">Pump Check</h1>
+    <img class="logo-hero" src="assets/logo.png"
+         alt="Pump Check: real gyms, real people, better workouts">
+
+    <div class="row" role="group" aria-label="Choose log in or sign up">
+      <button id="show-login" class="btn" type="button" aria-pressed="true">Log in</button>
+      <button id="show-register" class="btn btn-secondary" type="button" aria-pressed="false">Sign up</button>
+    </div>
+
+    <div id="message" class="alert" hidden></div>
+
+    <section class="card" style="margin-top: 1rem;">
+      <form id="login-form" novalidate>
+        <h2>Log in</h2>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input id="login-email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit">Log in</button>
+      </form>
+
+      <form id="register-form" novalidate hidden>
+        <h2>Create an account</h2>
+        <div class="field">
+          <label for="register-email">Email</label>
+          <input id="register-email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="register-username">Username</label>
+          <input id="register-username" type="text" maxlength="50" autocomplete="username" required>
+          <p class="hint">Up to 50 characters. Other users will see this on your reviews.</p>
+        </div>
+        <div class="field">
+          <label for="register-password">Password</label>
+          <input id="register-password" type="password" autocomplete="new-password" required>
+          <p class="hint">At least 8 characters.</p>
+        </div>
+        <button class="btn" type="submit">Sign up</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>
