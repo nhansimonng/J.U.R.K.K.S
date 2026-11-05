@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calories · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header id="navbar"></header>
+
+  <main id="main" class="container stack">
+    <h1>Calorie tracker</h1>
+
+    <div id="message" class="alert" hidden></div>
+    <div id="cache-banner" class="alert alert-error" role="status" hidden>
+      Search temporarily unavailable; showing cached results only.
+    </div>
+
+    <section class="card" aria-labelledby="day-heading">
+      <div class="row" style="justify-content: space-between;">
+        <h2 id="day-heading">Daily log</h2>
+        <div>
+          <label for="log-date">Date</label>
+          <input id="log-date" type="date">
+        </div>
+      </div>
+      <p class="muted">Total: <strong id="daily-total" style="color: var(--text);">0</strong> kcal</p>
+      <p id="empty" class="muted" hidden>Nothing logged for this day.</p>
+      <div class="table-wrap">
+        <table id="entries-table" hidden>
+          <thead>
+            <tr>
+              <th scope="col">Food</th>
+              <th scope="col">Portion</th>
+              <th scope="col">Calories</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="entries-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="add-heading">
+      <h2 id="add-heading">Add food</h2>
+      <form id="search-form" class="row" novalidate>
+        <div class="grow">
+          <label for="food-query">Search foods</label>
+          <input id="food-query" type="search" maxlength="200" placeholder="e.g. chicken breast">
+        </div>
+        <button class="btn" type="submit">Search</button>
+      </form>
+      <p id="search-status" class="hint" aria-live="polite"></p>
+      <ul id="food-results" class="list"></ul>
+
+      <form id="log-form" novalidate hidden style="margin-top: 1rem;">
+        <h3 id="selected-food"></h3>
+        <p id="selected-ref" class="hint"></p>
+        <div class="row">
+          <div>
+            <label for="portion">Portion</label>
+            <input id="portion" type="number" min="0" step="any" inputmode="decimal" required>
+          </div>
+          <div>
+            <label for="portion-unit">Unit</label>
+            <select id="portion-unit">
+              <option value="g" selected>g</option>
+              <option value="oz">oz</option>
+              <option value="cup">cup</option>
+              <option value="serving">serving</option>
+            </select>
+          </div>
+          <button class="btn" type="submit">Log food</button>
+          <button id="cancel-food" class="btn btn-secondary" type="button">Cancel</button>
+        </div>
+        <p class="hint">Cups and servings only work for foods that have a known gram weight. If you get an error, use g or oz.</p>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="js/calories.js"></script>
+</body>
+</html>

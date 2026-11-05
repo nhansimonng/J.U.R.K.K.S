@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workout log · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header id="navbar"></header>
+
+  <main id="main" class="container stack">
+    <h1>Workout log</h1>
+
+    <div id="message" class="alert" hidden></div>
+
+    <form id="log-form" class="card" novalidate>
+      <h2>Log a workout</h2>
+      <div class="row">
+        <div class="grow">
+          <label for="exercise">Exercise</label>
+          <input id="exercise" type="text" maxlength="100" placeholder="e.g. Bench Press" required>
+        </div>
+        <div>
+          <label for="sets">Sets</label>
+          <input id="sets" type="number" min="1" step="1" inputmode="numeric" required>
+        </div>
+        <div>
+          <label for="reps">Reps</label>
+          <input id="reps" type="number" min="1" step="1" inputmode="numeric" required>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1rem;">
+        <div>
+          <label for="weight">Weight</label>
+          <input id="weight" type="number" min="0" step="any" inputmode="decimal" required>
+        </div>
+        <div>
+          <label for="weight-unit">Unit</label>
+          <select id="weight-unit">
+            <option value="lb" selected>lb</option>
+            <option value="kg">kg</option>
+          </select>
+        </div>
+        <div>
+          <label for="log-date">Date</label>
+          <input id="log-date" type="date" required>
+        </div>
+        <button class="btn" type="submit">Add to log</button>
+      </div>
+    </form>
+
+    <section class="card" aria-labelledby="history-heading">
+      <h2 id="history-heading">History</h2>
+      <form id="filter-form" class="row" novalidate>
+        <div>
+          <label for="from">From</label>
+          <input id="from" type="date">
+        </div>
+        <div>
+          <label for="to">To</label>
+          <input id="to" type="date">
+        </div>
+        <button class="btn btn-secondary" type="submit">Filter</button>
+        <button id="clear-filter" class="btn btn-secondary" type="button">Clear</button>
+      </form>
+
+      <p id="empty" class="muted" hidden style="margin-top: 1rem;">No workouts logged yet.</p>
+      <div class="table-wrap" style="margin-top: 1rem;">
+        <table id="log-table" hidden>
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Exercise</th>
+              <th scope="col">Sets × Reps</th>
+              <th scope="col">Weight</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="log-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/workouts.js"></script>
+</body>
+</html>

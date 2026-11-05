@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Community plans · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header id="navbar"></header>
+
+  <main id="main" class="container stack">
+    <h1>Community plans</h1>
+
+    <div class="row" role="group" aria-label="Choose a view">
+      <button id="tab-browse" class="btn" type="button" aria-pressed="true">Browse</button>
+      <button id="tab-saved" class="btn btn-secondary" type="button" aria-pressed="false">Saved plans</button>
+    </div>
+
+    <div id="message" class="alert" hidden></div>
+
+    <form id="filter-form" class="card" novalidate>
+      <div class="row">
+        <div>
+          <label for="goal">Goal</label>
+          <select id="goal">
+            <option value="">Any goal</option>
+            <option value="muscle_gain">Muscle gain</option>
+            <option value="strength">Strength</option>
+            <option value="fat_loss">Fat loss</option>
+            <option value="endurance">Endurance</option>
+            <option value="general_fitness">General fitness</option>
+          </select>
+        </div>
+        <div class="grow">
+          <label for="muscle-group">Muscle group</label>
+          <input id="muscle-group" type="text" maxlength="200" placeholder="e.g. legs, chest">
+        </div>
+        <button class="btn" type="submit">Filter</button>
+        <button id="clear-filter" class="btn btn-secondary" type="button">Clear</button>
+      </div>
+    </form>
+
+    <p id="empty" class="muted" hidden></p>
+    <div id="plans" class="grid"></div>
+    <div class="row" style="justify-content: center;">
+      <button id="load-more" class="btn btn-secondary" type="button" hidden>Load more</button>
+    </div>
+  </main>
+
+  <script type="module" src="js/community.js"></script>
+</body>
+</html>

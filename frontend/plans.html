@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My plans · Pump Check</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header id="navbar"></header>
+
+  <main id="main" class="container stack">
+    <div class="row" style="justify-content: space-between;">
+      <h1>My plans</h1>
+      <button id="new-plan" class="btn" type="button">New plan</button>
+    </div>
+
+    <div id="message" class="alert" hidden></div>
+
+    <form id="plan-form" class="card" novalidate hidden>
+      <h2 id="form-title">New plan</h2>
+      <div class="row">
+        <div class="grow">
+          <label for="plan-name">Plan name</label>
+          <input id="plan-name" type="text" maxlength="200" placeholder="e.g. Push Day" required>
+        </div>
+        <div>
+          <label for="plan-goal">Goal</label>
+          <select id="plan-goal">
+            <option value="">No goal</option>
+            <option value="muscle_gain">Muscle gain</option>
+            <option value="strength">Strength</option>
+            <option value="fat_loss">Fat loss</option>
+            <option value="endurance">Endurance</option>
+            <option value="general_fitness">General fitness</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-top: 1rem;">
+        <label><input id="plan-public" type="checkbox" style="width: auto;"> Share this plan with the community</label>
+        <p class="hint">Private plans are only visible to you.</p>
+      </div>
+
+      <h3>Exercises</h3>
+      <p class="hint">Equipment names must match what gyms list (lowercase, e.g. barbell, bench, squat rack). Separate with commas.</p>
+      <div id="exercise-rows" class="stack"></div>
+      <div class="row" style="margin-top: 1rem;">
+        <button id="add-exercise" class="btn btn-secondary" type="button">Add exercise</button>
+        <button class="btn" type="submit">Save plan</button>
+        <button id="cancel-form" class="btn btn-secondary" type="button">Cancel</button>
+      </div>
+    </form>
+
+    <p id="empty" class="muted" hidden>You have no plans yet. Click "New plan" to create one.</p>
+    <div id="plans" class="grid"></div>
+  </main>
+
+  <script type="module" src="js/plans.js"></script>
+</body>
+</html>
