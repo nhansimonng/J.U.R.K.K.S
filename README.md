@@ -25,6 +25,27 @@ python -m uvicorn app.main:app --app-dir backend --reload
 Open http://127.0.0.1:8000/docs. Log in, then authorize with the access token.
 See [authentication setup](backend/AUTH_SETUP.md) for details.
 
+## Run the whole site (frontend + backend together)
+
+The backend now serves the website, so one command runs everything. From the repository root:
+
+```sh
+python -m uvicorn app.main:app --app-dir backend --reload
+```
+
+Open http://127.0.0.1:8000/ for the one-page site (`frontend/index.html`, code in `frontend/spa/`).
+The earlier multi-page files (`/login.html`, `/gyms.html`, ...) are still served and share the same login.
+Live Server on port 5500 also works: the site then calls the backend at `127.0.0.1:8000`.
+
+**Demo without Supabase/USDA keys** (fake login, throwaway in-memory database, sample gyms, reviews and plans):
+
+```sh
+python backend/demo_server.py
+```
+
+Log in with `demo@pumpcheck.demo` / `demo-pass-123`. Local demos and QA only; never deploy it.
+Add `?mock` to the site URL (`index.html?mock`) to build UI with no backend at all.
+
 ## Implemented features
 
 | Feature | Routes | External setup |

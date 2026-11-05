@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pump Check</title>
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+</head>
+<body>
+  <header class="site-header hidden" id="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#/gyms"><img src="assets/logo-wordmark.png" alt="Pump Check"></a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="#/gyms" data-nav="gyms">Gyms</a>
+        <a href="#/workouts" data-nav="workouts">Workouts</a>
+        <a href="#/plans" data-nav="plans">My Plans</a>
+        <a href="#/calories" data-nav="calories">Calories</a>
+        <a href="#/community" data-nav="community">Community</a>
+      </nav>
+      <div class="user-box">
+        <span class="initials" id="initials"></span>
+        <button class="outline small" id="logout" type="button">Log out</button>
+      </div>
+    </div>
+  </header>
+  <main id="app" class="page"></main>
+  <script type="module" src="spa/app.js"></script>
+</body>
+</html>

@@ -1,9 +1,11 @@
 import logging
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -73,3 +75,11 @@ def health_check():
 def db_health_check(db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))
     return {"status": "database connected"}
+
+
+# Serve the website from this same server: http://127.0.0.1:8000/ is the one-page site
+# (frontend/index.html) and the older multi-page files (login.html, ...) are served too.
+# Mounted last so every /api route and /docs above keep priority.
+FRONTEND_DIR = Path(__file__).resolve().parents[2] / "frontend"
+if FRONTEND_DIR.is_dir():
+    app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
