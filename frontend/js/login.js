@@ -1,4 +1,4 @@
-import { api, isLoggedIn, showError, showSuccess, clearMessage, withBusy } from './common.js?v=account-1';
+import { api, isLoggedIn, showError, showSuccess, clearMessage, withBusy } from './common.js?v=merged-5';
 
 const HOME_PAGE = 'index.html';
 
@@ -60,6 +60,10 @@ registerForm.addEventListener('submit', async event => {
   }
   if (password.length < 8) {
     showError('Password must be at least 8 characters.');
+    return;
+  }
+    if (!document.getElementById('register-agree').checked) {
+    showError('Please agree to the Terms of Use and Privacy Policy to create an account.');
     return;
   }
 

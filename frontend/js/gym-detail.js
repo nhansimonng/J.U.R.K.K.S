@@ -1,7 +1,7 @@
 import {
   api, requireLogin, renderNavbar, el,
   showError, showSuccess, clearMessage, withBusy
-} from './common.js?v=account-1';
+} from './common.js?v=merged-5';
 import { compressImage } from './image-utils.js';
 
 const gymId = new URLSearchParams(window.location.search).get('id');

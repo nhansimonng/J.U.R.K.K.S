@@ -1,7 +1,7 @@
 import {
   api, requireLogin, renderNavbar, el,
   showError, clearMessage, withBusy, starText
-} from './common.js?v=account-1';
+} from './common.js?v=merged-5';
 
 if (requireLogin()) {
   renderNavbar('gyms.html');

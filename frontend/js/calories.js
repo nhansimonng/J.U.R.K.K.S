@@ -1,4 +1,4 @@
-import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy, todayISO } from './common.js?v=account-1';
+import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy, todayISO } from './common.js?v=merged-5';
 
 if (requireLogin()) {
   renderNavbar('calories.html');
