@@ -1,4 +1,4 @@
-import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy, todayISO } from './common.js';
+import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy, todayISO } from './common.js?v=account-1';
 
 if (requireLogin()) {
   renderNavbar('calories.html');
@@ -65,34 +65,68 @@ function init() {
   dateInput.addEventListener('change', () => { clearMessage(); loadDay(); });
 
   // ---------- Food search ----------
-  searchForm.addEventListener('submit', async event => {
+  const queryInput = document.getElementById('food-query');
+  let searchTimer;
+  let searchVersion = 0;
+
+  function resetSearch() {
+    clearTimeout(searchTimer);
+    searchVersion += 1;
+    results.replaceChildren();
+    status.textContent = '';
+    banner.hidden = true;
+  }
+
+  queryInput.addEventListener('input', () => {
+    resetSearch();
+    if (queryInput.value.trim().length < 3) return;
+    status.textContent = 'Looking for suggestions…';
+    searchTimer = setTimeout(() => searchFoods(true), 400);
+  });
+  queryInput.addEventListener('keydown', event => {
+    if (event.key === 'Escape') resetSearch();
+    if (event.key === 'ArrowDown') {
+      const first = results.querySelector('button');
+      if (first) { event.preventDefault(); first.focus(); }
+    }
+  });
+  searchForm.addEventListener('submit', event => {
     event.preventDefault();
     clearMessage();
-    banner.hidden = true;
+    resetSearch();
+    if (!queryInput.value.trim()) return showError('Enter a food name.');
+    searchFoods(false);
+  });
 
-    const text = document.getElementById('food-query').value.trim();
-    if (!text) return showError('Enter a food name.');
-
-    const button = searchForm.querySelector('button[type="submit"]');
-    await withBusy(button, async () => {
-      try {
-        const data = await api.foods(text);
-        banner.hidden = !data.cached_only;
-        status.textContent = data.foods.length ? `${data.foods.length} result(s)` : 'No foods found.';
-        results.replaceChildren(...data.foods.map(food =>
+  async function searchFoods(suggestionsOnly) {
+    const text = queryInput.value.trim();
+    const version = ++searchVersion;
+    status.textContent = 'Searching…';
+    try {
+      const data = await api.foods(text);
+      if (version !== searchVersion) return;
+      const foods = suggestionsOnly ? data.foods.slice(0, 6) : data.foods;
+      banner.hidden = !data.cached_only;
+      status.textContent = foods.length
+        ? (suggestionsOnly ? 'Suggestions — select a food or press Search for more.' : `${foods.length} result(s)`)
+        : 'No foods found. Try another food name.';
+        results.replaceChildren(...foods.map(food =>
           el('li', { class: 'row', style: 'justify-content: space-between; align-items: center;' },
             el('span', {},
               el('strong', { text: food.name }),
               el('span', { class: 'muted small', text: ` · ${fmt(food.reference_calories)} kcal per ${food.reference_portion} ${food.reference_unit}` })),
             el('button', { class: 'btn btn-secondary btn-small', type: 'button', text: 'Select',
               'aria-label': `Select ${food.name}`, onclick: () => selectFood(food) }))));
-      } catch (error) {
-        showError(error.message);
-      }
-    });
-  });
+    } catch (error) {
+      if (version !== searchVersion) return;
+      status.textContent = 'Could not load foods. Press Search to try again.';
+      if (!suggestionsOnly) showError(error.message);
+    }
+  }
 
   function selectFood(food) {
+    resetSearch();
+    queryInput.value = food.name;
     selected = food;
     document.getElementById('selected-food').textContent = food.name;
     document.getElementById('selected-ref').textContent =

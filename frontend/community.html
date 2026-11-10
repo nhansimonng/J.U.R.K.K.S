@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Community plans · Pump Check</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=account-1">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
@@ -15,10 +15,13 @@
 
     <div class="row" role="group" aria-label="Choose a view">
       <button id="tab-browse" class="btn" type="button" aria-pressed="true">Browse</button>
+      <button id="tab-recommended" class="btn btn-secondary" type="button" aria-pressed="false">Recommendations</button>
       <button id="tab-saved" class="btn btn-secondary" type="button" aria-pressed="false">Saved plans</button>
     </div>
 
     <div id="message" class="alert" hidden></div>
+
+    <p id="recommendation-hint" class="hint" hidden>Choose a goal or muscle group to find matching public plans and your own plans. Suggestions use these filters, not AI.</p>
 
     <form id="filter-form" class="card" novalidate>
       <div class="row">
@@ -49,6 +52,6 @@
     </div>
   </main>
 
-  <script type="module" src="js/community.js"></script>
+  <script type="module" src="js/community.js?v=account-1"></script>
 </body>
 </html>

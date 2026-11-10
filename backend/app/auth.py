@@ -87,6 +87,15 @@ def auth_request(method, path, *, token=None, payload=None, params=None):
             raise HTTPException(403, "Confirm your email before logging in")
         if path == "token":
             raise HTTPException(401, "Invalid email or password")
+        if path == "user" and method == "PUT" and result.status_code not in (401, 403):
+            messages = {
+                "weak_password": "Password too weak",
+                "same_password": "Choose a different password",
+                "reauthentication_needed": "Log in again before changing your password",
+                "reauthentication_not_valid": "Log in again before changing your password",
+                "invalid_credentials": "Current password is incorrect",
+            }
+            raise HTTPException(400, messages.get(code, "Unable to update account. Check your current password or log in again."))
         if path in ("user", "logout"):
             raise HTTPException(401, "Invalid or expired access token")
         if code in ("user_already_exists", "email_exists"):
@@ -170,3 +179,43 @@ def me(identity: dict = Depends(get_current_user), db: Session = Depends(get_db)
     profile = get_profile(identity, db)
     return ProfileResponse(id=profile.id, email=identity["email"],
                            username=profile.username, created_at=profile.created_at)
+
+
+class ProfileUpdate(BaseModel):
+    username: str = Field(min_length=1, max_length=50)
+
+    @field_validator("username")
+    @classmethod
+    def clean_username(cls, value):
+        value = value.strip()
+        if not value:
+            raise ValueError("Username cannot be blank")
+        return value
+
+
+class PasswordUpdate(BaseModel):
+    current_password: SecretStr = Field(min_length=1, max_length=1024)
+    password: SecretStr = Field(min_length=8, max_length=1024)
+
+
+@router.patch("/api/users/me", response_model=ProfileResponse)
+def update_profile(body: ProfileUpdate, identity: dict = Depends(get_current_user),
+                   db: Session = Depends(get_db)):
+    profile = get_profile(identity, db)
+    profile.username = body.username
+    db.commit()
+    db.refresh(profile)
+    return ProfileResponse(id=profile.id, email=identity["email"],
+                           username=profile.username, created_at=profile.created_at)
+
+
+@router.put("/api/users/me/password", status_code=204)
+def update_password(body: PasswordUpdate, token: str = Depends(get_access_token),
+                    identity: dict = Depends(get_current_user)):
+    if body.current_password.get_secret_value() == body.password.get_secret_value():
+        raise HTTPException(400, "Choose a different password")
+    auth_request("PUT", "user", token=token, payload={
+        "password": body.password.get_secret_value(),
+        "current_password": body.current_password.get_secret_value(),
+    })
+    return Response(status_code=204)

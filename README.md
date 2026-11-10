@@ -137,14 +137,35 @@ review aggregation, photos, calorie conversions, provider error handling, and
 frontend token/HTTP behavior. Provider calls are simulated; local DB tests use
 SQLite with a test-only JSON substitute for PostgreSQL arrays.
 
-Earlier live checks confirmed auth, workout-log CRUD, and workout-plan creation
-and listing. New review/community/calorie/photo flows have not been live-tested
-against Supabase or external providers. The user chose local-only verification.
+Live checks confirmed auth, workout-log CRUD, workout-plan creation and listing,
+Google Places search, and USDA food search. On November 4, 2026, all 30 remaining
+backend integration tests passed against temporary PostgreSQL tables with rollback.
+Those tests still simulate authentication and external providers. A separate live
+authenticated photo upload and public read succeeded; the test image was removed.
+Full frontend integration and deployed-service checks remain outstanding.
 
 An optional PostgreSQL test mode exists for a separately approved run:
 `python -m pytest backend/tests/test_remaining_backend.py --postgres -q`.
 It uses the configured database connection, temporary tables, and an outer
 rollback. Do not run it against a shared database without team authorization.
-No shared schema, storage configuration, or production data was changed by
-these tests. The existing dependency stack emits a Starlette TestClient
+The temporary-table tests do not change public tables. The existing dependency stack emits a Starlette TestClient
 httpx deprecation warning; tests still pass.
+
+See [backend deployment instructions](DEPLOYMENT.md) for Render service settings
+and the environment variables needed to use the existing Supabase project.
+
+
+## Home and account settings
+Open http://127.0.0.1:5500/index.html after starting the frontend and backend.
+Sign-in now leads to Home; Account is available in the navigation.
+Account settings support username updates and password changes (current password
+required). Passwords are sent to Supabase Auth, never stored in the profile table.
+If Supabase requires reauthentication, log in again and retry.
+
+The gym detail page supports equipment reports and workout-plan compatibility.
+Community recommendations match a goal or muscle group against accessible plans.
+Food search offers suggestions after typing at least three characters.
+
+November 9 verification: 97 local Python tests and 7 JavaScript API tests passed.
+Real password changes have not been exercised; use your own test account for
+the final live check. Hosting deployment is still pending.

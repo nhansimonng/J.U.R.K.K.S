@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Calories · Pump Check</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=account-1">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
@@ -48,10 +48,11 @@
       <form id="search-form" class="row" novalidate>
         <div class="grow">
           <label for="food-query">Search foods</label>
-          <input id="food-query" type="search" maxlength="200" placeholder="e.g. chicken breast">
+          <input id="food-query" type="search" autocomplete="off" aria-describedby="food-search-hint" maxlength="200" placeholder="e.g. chicken breast">
         </div>
         <button class="btn" type="submit">Search</button>
       </form>
+      <p id="food-search-hint" class="hint">Type at least 3 letters for food suggestions.</p>
       <p id="search-status" class="hint" aria-live="polite"></p>
       <ul id="food-results" class="list"></ul>
 
@@ -80,6 +81,6 @@
     </section>
   </main>
 
-  <script type="module" src="js/calories.js"></script>
+  <script type="module" src="js/calories.js?v=account-1"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
-import { api, isLoggedIn, showError, showSuccess, clearMessage, withBusy } from './common.js';
+import { api, isLoggedIn, showError, showSuccess, clearMessage, withBusy } from './common.js?v=account-1';
 
-const HOME_PAGE = 'gyms.html';
+const HOME_PAGE = 'index.html';
 
 // Already logged in? Skip this page.
 if (isLoggedIn()) window.location.href = HOME_PAGE;

@@ -165,3 +165,5 @@ dialog {
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.65); }
 dialog form { margin: 0; }
+/* Keep hidden controls hidden even when their classes use flex or inline-block. */
+[hidden] { display: none !important; }

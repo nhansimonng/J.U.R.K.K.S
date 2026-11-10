@@ -160,3 +160,47 @@ def test_missing_configuration(setup, monkeypatch):
     monkeypatch.setattr(auth.config, "SUPABASE_URL", None)
     assert client.post("/api/auth/login", json=LOGIN).status_code == 503
     assert state["requests"] == []
+
+
+def test_profile_update_persists_for_current_user(setup):
+    client, state, engine = setup
+    state["data"] = IDENTITY
+    response = client.patch("/api/users/me", headers=HEADERS, json={"username": " New Name "})
+    assert response.status_code == 200
+    assert response.json()["username"] == "New Name"
+    with Session(engine) as db:
+        assert db.get(User, UUID(USER_ID)).username == "New Name"
+    assert client.patch("/api/users/me", headers=HEADERS, json={"username": "  "}).status_code == 400
+
+
+def test_account_changes_require_authentication(setup):
+    client, _, _ = setup
+    assert client.patch("/api/users/me", json={"username": "test"}).status_code == 401
+    assert client.put("/api/users/me/password", json={
+        "current_password": "oldpassword", "password": "newpassword"
+    }).status_code == 401
+
+
+def test_password_update_sends_current_password_and_hides_secrets(setup):
+    import json
+    client, state, _ = setup
+    state["data"] = IDENTITY
+    response = client.put("/api/users/me/password", headers=HEADERS, json={
+        "current_password": "oldpassword", "password": "newpassword"
+    })
+    assert response.status_code == 204
+    request = state["requests"][-1]
+    assert request.method == "PUT"
+    assert request.url.path == "/auth/v1/user"
+    assert json.loads(request.content) == {"current_password": "oldpassword", "password": "newpassword"}
+    assert not response.content
+
+
+def test_password_provider_rejection_keeps_useful_error(setup):
+    client, state, _ = setup
+    state["data"] = {"error_code": "weak_password"}
+    state["status"] = 422
+    with pytest.raises(auth.HTTPException) as error:
+        auth.auth_request("PUT", "user", token="test-token", payload={"password": "short"})
+    assert error.value.status_code == 400
+    assert error.value.detail == "Password too weak"

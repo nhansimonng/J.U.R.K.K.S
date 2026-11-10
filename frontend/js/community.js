@@ -1,11 +1,11 @@
-import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy } from './common.js';
+import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy } from './common.js?v=account-1';
+
+const PAGE_SIZE = 20;
 
 if (requireLogin()) {
   renderNavbar('community.html');
   init();
 }
-
-const PAGE_SIZE = 20;
 
 function init() {
   const plansBox = document.getElementById('plans');
@@ -15,22 +15,25 @@ function init() {
   const tabBrowse = document.getElementById('tab-browse');
   const tabSaved = document.getElementById('tab-saved');
 
+  const tabRecommended = document.getElementById('tab-recommended');
+  let requestVersion = 0;
   let view = 'browse';
   let offset = 0;
   const savedIds = new Set();
 
   function setView(next) {
     view = next;
-    const browsing = view === 'browse';
-    tabBrowse.setAttribute('aria-pressed', String(browsing));
-    tabSaved.setAttribute('aria-pressed', String(!browsing));
-    tabBrowse.className = browsing ? 'btn' : 'btn btn-secondary';
-    tabSaved.className = browsing ? 'btn btn-secondary' : 'btn';
-    filterForm.hidden = !browsing;
+    for (const [button, mode] of [[tabBrowse, 'browse'], [tabSaved, 'saved'], [tabRecommended, 'recommended']]) {
+      button.setAttribute('aria-pressed', String(view === mode));
+      button.className = view === mode ? 'btn' : 'btn btn-secondary';
+    }
+    filterForm.hidden = view === 'saved';
+    document.getElementById('recommendation-hint').hidden = view !== 'recommended';
     clearMessage();
     reload();
   }
 
+  tabRecommended.addEventListener('click', () => setView('recommended'));
   tabBrowse.addEventListener('click', () => setView('browse'));
   tabSaved.addEventListener('click', () => setView('saved'));
   filterForm.addEventListener('submit', event => { event.preventDefault(); clearMessage(); reload(); });
@@ -53,20 +56,35 @@ function init() {
   }
 
   async function reload() {
+    const version = ++requestVersion;
     offset = 0;
     plansBox.replaceChildren();
     loadMore.hidden = true;
     empty.hidden = true;
     await loadSavedIds();
-    await fetchPage(false);
+    if (version === requestVersion) await fetchPage(false);
   }
 
   async function fetchPage(append) {
+    if (append && view !== 'browse') return;
+    const version = requestVersion;
     try {
       let plans;
       if (view === 'saved') {
         ({ plans } = await api.savedPlans());
+        if (version !== requestVersion) return;
         empty.textContent = 'You have not saved any plans yet. Browse community plans and click Save.';
+      } else if (view === 'recommended') {
+        const goal = document.getElementById('goal').value;
+        const muscle_group = document.getElementById('muscle-group').value.trim();
+        if (!goal && !muscle_group) {
+          empty.textContent = 'Choose a goal or muscle group, then click Filter.';
+          empty.hidden = false;
+          return;
+        }
+        ({ plans } = await api.recommendations({ goal, muscle_group }));
+        if (version !== requestVersion) return;
+        empty.textContent = 'No matching plans yet. Try another filter or create a plan in My Plans.';
       } else {
         ({ plans } = await api.publicPlans({
           goal: document.getElementById('goal').value,
@@ -74,6 +92,7 @@ function init() {
           limit: PAGE_SIZE,
           offset
         }));
+        if (version !== requestVersion) return;
         empty.textContent = 'No community plans match those filters.';
         offset += plans.length;
         loadMore.hidden = plans.length < PAGE_SIZE;
@@ -127,7 +146,8 @@ function init() {
           ex.muscle_group ? el('span', { class: 'muted small', text: ` · ${ex.muscle_group}` }) : null,
           ex.required_equipment?.length
             ? el('div', { class: 'small muted', text: `Needs: ${ex.required_equipment.join(', ')}` }) : null))),
-      el('div', { style: 'margin-top: 0.75rem;' }, saveButton));
+      plan.is_public ? el('div', { style: 'margin-top: 0.75rem;' }, saveButton)
+        : el('p', { class: 'hint', text: 'Your private plan · edit it in My Plans.' }));
     return card;
   }
 

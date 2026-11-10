@@ -42,6 +42,8 @@ export function createApi({ baseUrl = 'http://127.0.0.1:8000', storage = globalT
       try { return await request('/api/auth/logout', { method: 'POST' }); }
       finally { storage.removeItem(key); }
     },
+    updateProfile: body => request('/api/users/me', { method: 'PATCH', body }),
+    changePassword: body => request('/api/users/me/password', { method: 'PUT', body }),
     me: () => request('/api/users/me'),
     gyms: filters => request('/api/gyms' + query(filters)),
     gym: gymId => request(`/api/gyms/${id(gymId)}`),

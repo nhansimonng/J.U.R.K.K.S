@@ -1,4 +1,4 @@
-import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy } from './common.js';
+import { api, requireLogin, renderNavbar, el, showError, showSuccess, clearMessage, withBusy } from './common.js?v=account-1';
 
 if (requireLogin()) {
   renderNavbar('plans.html');

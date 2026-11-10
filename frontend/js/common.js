@@ -1,4 +1,4 @@
-import { createApi } from '../api.js';
+import { createApi } from '../api.js?v=account-1';
 
 const TOKEN_KEY = 'pump_check_access_token';
 const LOGIN_PAGE = 'login.html';
@@ -87,11 +87,13 @@ export function todayISO() {
 }
 
 const LINKS = [
+  ['index.html', 'Home'],
   ['gyms.html', 'Gyms'],
   ['workouts.html', 'Workouts'],
   ['plans.html', 'My Plans'],
   ['calories.html', 'Calories'],
-  ['community.html', 'Community']
+  ['community.html', 'Community'],
+  ['account.html', 'Account']
 ];
 
 /**
@@ -99,6 +101,7 @@ const LINKS = [
  * Pass the current page's file name, e.g. renderNavbar('gyms.html').
  */
 export function renderNavbar(current) {
+  document.querySelector('.skip-link')?.remove();
   document.body.prepend(
     el('a', { class: 'skip-link', href: '#main', text: 'Skip to main content' })
   );
@@ -120,8 +123,8 @@ export function renderNavbar(current) {
 
   const header = document.getElementById('navbar');
   header.className = 'navbar';
-  header.append(el('div', { class: 'container' },
-        el('a', { class: 'brand', href: 'gyms.html', 'aria-label': 'Pump Check home' },
+  header.replaceChildren(el('div', { class: 'container' },
+        el('a', { class: 'brand', href: 'index.html', 'aria-label': 'Pump Check home' },
       el('img', { src: 'assets/logo-wordmark.png', alt: 'Pump Check' })),
     nav, userLabel, logout));
 

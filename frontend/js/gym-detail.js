@@ -1,7 +1,7 @@
 import {
   api, requireLogin, renderNavbar, el,
   showError, showSuccess, clearMessage, withBusy
-} from './common.js';
+} from './common.js?v=account-1';
 import { compressImage } from './image-utils.js';
 
 const gymId = new URLSearchParams(window.location.search).get('id');
@@ -35,6 +35,81 @@ function start() {
   const addressEl = document.getElementById('gym-address');
   const ratingEl = document.getElementById('gym-rating');
   const equipmentList = document.getElementById('equipment-list');
+  const equipmentForm = document.getElementById('equipment-form');
+  const planSelect = document.getElementById('compatibility-plan');
+  const compatibilityStatus = document.getElementById('compatibility-status');
+  const compatibilityResults = document.getElementById('compatibility-results');
+  let compatibilityVersion = 0;
+
+  function clearCompatibility() {
+    compatibilityVersion += 1;
+    compatibilityStatus.textContent = '';
+    compatibilityResults.replaceChildren();
+  }
+  planSelect.addEventListener('change', clearCompatibility);
+
+  async function loadPlanChoices() {
+    try {
+      const { plans } = await api.myPlans();
+      planSelect.replaceChildren(el('option', { value: '', text: plans.length ? 'Choose a plan' : 'Create a plan first' }),
+        ...plans.map(plan => el('option', { value: plan.id, text: plan.name })));
+      document.getElementById('check-plan').disabled = !plans.length;
+    } catch (error) {
+      planSelect.replaceChildren(el('option', { value: '', text: 'Could not load plans. Reload to retry.' }));
+      showError(error.message);
+    }
+  }
+
+  equipmentForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    clearMessage();
+    const name = document.getElementById('equipment-name').value.trim();
+    if (!name) return showError('Enter an equipment name.');
+    await withBusy(equipmentForm.querySelector('button[type="submit"]'), async () => {
+      try {
+        await api.updateEquipment(gymId, {
+          name,
+          availability: document.getElementById('equipment-availability').value,
+          condition: document.getElementById('equipment-condition').value
+        });
+        clearCompatibility();
+        await loadGym();
+        equipmentForm.reset();
+        showSuccess('Equipment report saved. Check your plan again to use the latest report.');
+      } catch (error) { showError(error.message); }
+    });
+  });
+
+  document.getElementById('compatibility-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!planSelect.value) return;
+    clearCompatibility();
+    const version = compatibilityVersion;
+    compatibilityStatus.textContent = 'Checking equipment…';
+    await withBusy(document.getElementById('check-plan'), async () => {
+      try {
+        const data = await api.compatibility(gymId, planSelect.value);
+        if (version !== compatibilityVersion) return;
+        compatibilityStatus.textContent = !data.results.length ? 'This plan has no exercises.'
+          : data.compatible ? 'All exercises are supported by the reported equipment.'
+          : 'Some exercises have unavailable or unconfirmed equipment. See details below.';
+        const labels = { compatible: 'Supported', unavailable: 'Unavailable equipment', unconfirmed: 'Equipment not confirmed' };
+        compatibilityResults.replaceChildren(...data.results.map(item => el('li', {},
+          el('strong', { text: item.exercise_name }), ' ',
+          el('span', { class: item.status === 'compatible' ? 'badge badge-ok' : 'badge', text: labels[item.status] || item.status }),
+          item.missing_equipment.length ? el('p', { class: 'hint', text: 'Equipment to check: ' + item.missing_equipment.join(', ') }) : null,
+          item.status !== 'compatible' ? el('p', { class: 'hint', text: item.alternatives.length
+            ? 'Alternatives for the same muscle group: ' + item.alternatives.map(a => a.name).join(', ')
+            : 'No supported alternatives found in available plans.' }) : null)));
+      } catch (error) {
+        if (version !== compatibilityVersion) return;
+        compatibilityStatus.textContent = 'Could not check this plan. Please try again.';
+        showError(error.message);
+      }
+    });
+  });
+
+  loadPlanChoices();
   const busyList = document.getElementById('busy-list');
   const reviewsEl = document.getElementById('reviews');
   const reviewCount = document.getElementById('review-count');
@@ -130,7 +205,15 @@ function start() {
           item.condition && el('span', {
             class: item.condition === 'broken' ? 'badge badge-bad' : 'badge',
             text: `${item.condition} condition`
-          })))
+          }),
+          el('button', { type: 'button', class: 'btn btn-secondary btn-small', text: 'Update',
+            'aria-label': 'Update ' + item.name,
+            onclick: () => {
+              document.getElementById('equipment-name').value = item.name;
+              document.getElementById('equipment-availability').value = item.availability || 'unconfirmed';
+              document.getElementById('equipment-condition').value = item.condition || '';
+              document.getElementById('equipment-name').focus();
+            } })))
       : [el('li', { class: 'muted', text: 'No equipment reported yet.' })]));
 
     busyList.replaceChildren(...(gym.busy_hours.length

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gym · Pump Check</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=account-1">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
 <body>
@@ -25,12 +25,36 @@
       <section class="card" aria-labelledby="equipment-heading">
         <h2 id="equipment-heading">Equipment</h2>
         <ul id="equipment-list" class="list"></ul>
+        <form id="equipment-form" class="stack">
+          <h3>Add or update equipment</h3>
+          <p class="hint">Use the same equipment name as your workout plan. An existing name updates its report.</p>
+          <div><label for="equipment-name">Equipment name</label>
+            <input id="equipment-name" maxlength="200" required placeholder="e.g. squat rack"></div>
+          <div><label for="equipment-availability">Availability</label>
+            <select id="equipment-availability"><option value="unconfirmed">Not confirmed</option><option value="available">Available</option><option value="unavailable">Unavailable</option></select></div>
+          <div><label for="equipment-condition">Condition</label>
+            <select id="equipment-condition" required><option value="">Choose condition</option><option value="good">Good</option><option value="fair">Fair</option><option value="worn">Worn</option><option value="broken">Broken</option></select></div>
+          <button class="btn" type="submit">Save equipment report</button>
+        </form>
       </section>
       <section class="card" aria-labelledby="busy-heading">
         <h2 id="busy-heading">Busy hours</h2>
         <ul id="busy-list" class="list"></ul>
       </section>
     </div>
+
+    <section class="card" aria-labelledby="compatibility-heading">
+      <h2 id="compatibility-heading">Will my plan work here?</h2>
+      <p class="hint">Checks reported equipment. Missing reports mean unconfirmed, not necessarily unavailable.</p>
+      <form id="compatibility-form" class="row">
+        <div class="grow"><label for="compatibility-plan">Your workout plan</label>
+          <select id="compatibility-plan" required><option value="">Loading plans…</option></select></div>
+        <button class="btn" type="submit" id="check-plan" disabled>Check plan</button>
+      </form>
+      <p id="compatibility-status" role="status"></p>
+      <ul id="compatibility-results" class="list"></ul>
+      <p><a href="plans.html">Create or edit a workout plan</a></p>
+    </section>
 
     <section class="card" aria-labelledby="write-heading">
       <form id="review-form" novalidate>
@@ -90,6 +114,6 @@
     </form>
   </dialog>
 
-  <script type="module" src="js/gym-detail.js"></script>
+  <script type="module" src="js/gym-detail.js?v=account-1"></script>
 </body>
 </html>
