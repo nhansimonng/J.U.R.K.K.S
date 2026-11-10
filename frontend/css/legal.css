@@ -1,0 +1,9 @@
+.legal h1 { margin-bottom: 0.25rem; }
+.legal h2 { margin-top: 2rem; font-size: 1.2rem; }
+.legal ul { padding-left: 1.25rem; margin: 0 0 1rem; }
+.legal li { margin-bottom: 0.35rem; }
+.legal .notice {
+  border-left: 4px solid var(--accent); background: var(--surface);
+  padding: 0.75rem 1rem; border-radius: 0 8px 8px 0; margin: 1rem 0 0;
+}
+.legal-nav { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }

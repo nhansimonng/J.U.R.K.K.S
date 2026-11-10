@@ -260,3 +260,10 @@ th, td { padding: .9rem .7rem; }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 .navbar .btn { width: auto; }
+
+/* Keep the footer at the bottom of the window on short pages */
+body { display: flex; flex-direction: column; }
+main { flex: 1 0 auto; width: 100%; margin-left: auto; margin-right: auto; }
+.legal-footer { flex-shrink: 0; border-top: 1px solid var(--border); margin-top: 2rem; }
+.legal-footer .container { padding-top: 1rem; padding-bottom: 1.5rem; }
+.legal-footer p { margin-bottom: 0.5rem; }

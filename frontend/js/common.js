@@ -128,6 +128,21 @@ export function renderNavbar(current) {
       el('img', { src: 'assets/logo-wordmark.png', alt: 'Pump Check' })),
     nav, userLabel, logout));
 
+  // Footer with the legal links, added once per page
+    // Footer: legal links and health disclaimer, kept at the bottom of every page
+  if (!document.getElementById('site-footer')) {
+    document.body.append(
+      el('footer', { id: 'site-footer', class: 'legal-footer' },
+        el('div', { class: 'container small muted' },
+          el('p', {
+            text: 'Workout plans, logs, recommendations, and calorie information are for general information only and are not medical, fitness, or nutrition advice. Talk to a qualified professional before starting a new exercise program, and stop if something hurts.'
+          }),
+          el('p', {},
+            el('a', { href: 'privacy.html', text: 'Privacy Policy' }), ' · ',
+            el('a', { href: 'terms.html', text: 'Terms of Use' }),
+            ' · Pump Check is a student demo project.'))));
+  }
+
   // Show the username; a failure here is not worth an error message
   api.me().then(user => { userLabel.textContent = user.username; }).catch(() => {});
 }

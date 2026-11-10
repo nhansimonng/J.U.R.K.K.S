@@ -62,6 +62,10 @@ registerForm.addEventListener('submit', async event => {
     showError('Password must be at least 8 characters.');
     return;
   }
+    if (!document.getElementById('register-agree').checked) {
+    showError('Please agree to the Terms of Use and Privacy Policy to create an account.');
+    return;
+  }
 
   const button = registerForm.querySelector('button[type="submit"]');
   await withBusy(button, async () => {
