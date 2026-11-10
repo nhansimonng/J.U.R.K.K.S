@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Community plans · Pump Check</title>
-  <link rel="stylesheet" href="css/styles.css?v=blue-white-3">
+  <link rel="stylesheet" href="css/styles.css?v=all-pages-4">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
-<body>
+<body class="page-community">
   <header id="navbar"></header>
 
   <main id="main" class="container stack">
-    <h1>Community plans</h1>
+    <section class="page-intro"><div><p class="eyebrow">TRAIN BETTER, TOGETHER</p><h1>Community plans</h1><p class="intro-description">Find inspiration, discover routines, and save plans worth trying.</p></div><img src="assets/community-art.svg" alt="" width="160" height="160"></section>
 
-    <div class="row" role="group" aria-label="Choose a view">
+    <div class="row view-tabs" role="group" aria-label="Choose a view">
       <button id="tab-browse" class="btn" type="button" aria-pressed="true">Browse</button>
       <button id="tab-recommended" class="btn btn-secondary" type="button" aria-pressed="false">Recommendations</button>
       <button id="tab-saved" class="btn btn-secondary" type="button" aria-pressed="false">Saved plans</button>
@@ -45,7 +45,7 @@
       </div>
     </form>
 
-    <p id="empty" class="muted" hidden></p>
+    <p id="empty" class="muted empty-state" hidden></p>
     <div id="plans" class="grid"></div>
     <div class="row" style="justify-content: center;">
       <button id="load-more" class="btn btn-secondary" type="button" hidden>Load more</button>

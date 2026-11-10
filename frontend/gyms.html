@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Find a gym · Pump Check</title>
-  <link rel="stylesheet" href="css/styles.css?v=blue-white-3">
+  <link rel="stylesheet" href="css/styles.css?v=all-pages-4">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 </head>
-<body>
+<body class="page-gyms">
   <header id="navbar"></header>
 
   <main id="main" class="container stack">
-    <h1>Find a gym</h1>
+    <section class="page-intro"><div><p class="eyebrow">FIND YOUR SPACE</p><h1>Find a gym</h1><p class="intro-description">A great workout starts with the right place. Explore gyms and their equipment.</p></div><img src="assets/gyms-art.svg" alt="" width="160" height="160"></section>
 
     <div id="message" class="alert" hidden></div>
 
     <form id="search-form" class="card" novalidate>
-      <div class="row">
+      <h2>Where do you want to train?</h2><div class="row">
         <div class="grow">
           <label for="query">Gym name or location</label>
           <input id="query" type="search" maxlength="200" placeholder="e.g. San Jose or Planet Fitness">
@@ -44,7 +44,7 @@
     </form>
 
     <section aria-labelledby="results-heading">
-      <h2 id="results-heading" class="visually-hidden">Results</h2>
+      <h2 id="results-heading">Results</h2>
       <p id="result-count" class="muted" aria-live="polite"></p>
       <div id="results" class="grid"></div>
     </section>
